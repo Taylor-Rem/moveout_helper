@@ -11,16 +11,21 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 
 class WebDriverOperations:
-    def __init__(self):
-        self.driver = self.setup_webdriver()
-        self.wait = WebDriverWait(self.driver, 10)
+    _instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super(WebDriverOperations, cls).__new__(cls)
+            cls._instance.setup_webdriver()
+        return cls._instance
 
     def setup_webdriver(self):
         options = Options()
         options.add_experimental_option("detach", True)
-        return webdriver.Chrome(
+        self.driver = webdriver.Chrome(
             service=Service(ChromeDriverManager().install()), options=options
         )
+        self.wait = WebDriverWait(self.driver, 10)
 
     def login(self, username, password):
         try:

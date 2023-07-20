@@ -1,30 +1,45 @@
 from PyQt5.QtWidgets import QApplication, QPushButton, QVBoxLayout, QWidget
 from moveout_helper import Moveout_Helper
+from webdriver_operations import WebDriverOperations
 
 
 class App(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.helper = Moveout_Helper()
+        self.helper = Moveout_Helper(self)
+        self.webdriver = WebDriverOperations()
         self.initUI()
 
     def initUI(self):
         vbox = QVBoxLayout()
         self.setLayout(vbox)
 
-        self.btn = QPushButton("Next", self)
-        self.btn.clicked.connect(self.on_click)
+        self.add_btn = QPushButton("Add", self)
+        self.skip_btn = QPushButton("Skip", self)
+        self.quit_btn = QPushButton("Quit", self)
 
-        vbox.addWidget(self.btn)
+        self.add_btn.clicked.connect(self.add)
+        self.skip_btn.clicked.connect(self.skip)
+        self.quit_btn.clicked.connect(self.quit_app)
 
-    def on_click(self):
+        vbox.addWidget(self.add_btn)
+        vbox.addWidget(self.skip_btn)
+        vbox.addWidget(self.quit_btn)
+
+    def add(self):
+        self.helper.add_ledger()
+
+    def skip(self):
         self.helper.next_step()
+
+    def quit_app(self):
+        self.close()
+        self.webdriver.driver.quit()
 
 
 if __name__ == "__main__":
-    # the below lines set up a PyQt5 application
     app = QApplication([])
-    ex = App()  # create an instance of our App class
-    ex.show()  # show the UI
-    app.exec_()  # start the application event loop
+    ex = App()
+    ex.show()
+    app.exec_()
