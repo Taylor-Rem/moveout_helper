@@ -43,6 +43,7 @@ class PDFExtractor:
                     numbers.extend(match[1] for match in matches)
 
         property_names = pdf_text[0::2]
+        resident_names = pdf_text[1::2]
         unit_numbers = numbers[0::2]
 
-        return property_names, unit_numbers
+        return property_names, resident_names, unit_numbers

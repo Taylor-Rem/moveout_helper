@@ -28,7 +28,7 @@ class App(QWidget):
         vbox.addWidget(self.quit_btn)
 
     def add(self):
-        self.helper.add_ledger()
+        self.helper.add_button()
 
     def skip(self):
         self.helper.next_step()

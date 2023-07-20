@@ -57,3 +57,27 @@ class WebDriverOperations:
         ledger_xpath = "/html/body/table[2]/tbody/tr[4]/td/table/tbody/tr/td/table[3]/tbody/tr[2]/td/table/tbody/tr[last()]/td[4]/a[4]"
         ledger_link = self.driver.find_element(By.XPATH, ledger_xpath)
         ledger_link.click()
+
+    def compare_resident(self, resident):
+        try:
+            RM_resident_element = self.driver.find_element(
+                By.XPATH,
+                "/html/body/table[2]/tbody/tr[4]/td/table/tbody/tr/td/table[3]/tbody/tr[2]/td/table/tbody/tr[2]/td[2]/a",
+            )
+            RM_resident = RM_resident_element.get_attribute("innerHTML").strip()
+            if resident in RM_resident:
+                return True
+            return False
+        except NoSuchElementException:
+            return False
+
+    def search_former(self, resident):
+        former_resident = self.driver.find_element(
+            By.XPATH,
+            "/html/body/table[2]/tbody/tr[4]/td/table/tbody/tr/td/table[3]/tbody/tr[1]/td/table/tbody/tr/td[3]/input[2]",
+        )
+        former_resident.click()
+        spacenum = self.driver.find_element(By.NAME, "ressearch")
+        spacenum.clear()
+        spacenum.send_keys(resident)
+        spacenum.send_keys(Keys.ENTER)
