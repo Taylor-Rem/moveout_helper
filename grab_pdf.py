@@ -11,7 +11,7 @@ class PDFExtractor:
         year = now.year
 
         path = f"/Users/{username}/Desktop/move_out_helper/{year}/{month}/{day}"
-        self.json_path = f"/Users/{username}/Desktop/move_out_helper/{year}/{month}"
+        self.json_path = f"/Users/{username}/Desktop/move_out_helper/{year}/{month}/"
 
         file_name = os.listdir(path)[-1]
         self.file_path = os.path.join(path, file_name)

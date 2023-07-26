@@ -37,10 +37,10 @@ class Moveout_Helper:
         self.json_operations.write_json(self.temp_storage)
 
     def next_step(self):
+        self.current_index += 1
         if self.current_index < len(self.property_names):
             self.load_next_property_resident_unit()
             self.process_current_property_resident_unit()
-            self.current_index += 1
 
         if self.current_index >= len(self.property_names):
             self.close_application()
@@ -64,7 +64,7 @@ class Moveout_Helper:
             self.webdriver.open_ledger()
         except NoSuchElementException:
             self.log_error_with_property_resident_unit()
-            self.add_to_ledger()
+            self.next_step()
 
     def log_error_with_property_resident_unit(self):
         # Use appropriate logging mechanism

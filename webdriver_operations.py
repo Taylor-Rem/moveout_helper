@@ -7,25 +7,29 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 
-from webdriver_manager.chrome import ChromeDriverManager
-
 
 class WebDriverOperations:
     _instance = None
+    driver = None
 
     def __new__(cls, *args, **kwargs):
         if cls._instance is None:
-            cls._instance = super(WebDriverOperations, cls).__new__(cls)
-            cls._instance.setup_webdriver()
+            cls._instance = super().__new__(cls)
+            cls._instance.__initialized = False
         return cls._instance
 
-    def setup_webdriver(self):
-        options = Options()
-        options.add_experimental_option("detach", True)
-        self.driver = webdriver.Chrome(
-            service=Service(ChromeDriverManager().install()), options=options
-        )
+    def __init__(self):
+        if self.__initialized:
+            return
+        self.driver = self.setup_webdriver()
         self.wait = WebDriverWait(self.driver, 10)
+        self.__initialized = True
+        self.primary_tab = None
+
+    def setup_webdriver(self):
+        service = Service()
+        options = webdriver.ChromeOptions()
+        return webdriver.Chrome(service=service, options=options)
 
     def login(self, username, password):
         try:
